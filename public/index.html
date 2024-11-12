@@ -6,28 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stream de Vídeo</title>
     <style>
-        #video-container {
-            text-align: center;
-            padding: 10px;
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
 
         #video {
-            width: 1280px;
-            height: 720px;
+            width: 100vw;
+            height: 100vh;
             object-fit: contain;
         }
     </style>
 </head>
 
 <body>
-    <h1>Stream de Vídeo da Câmera</h1>
     <div id="video-container">
         <img id="video" src="" alt="Video Stream" />
     </div>
 
     <script>
         const videoElement = document.getElementById('video');
-        //const ws = new WebSocket('ws://localhost:9999'); // WebSocket para o stream
         const ws = new WebSocket('ws://10.0.1.73:9999');
         // Definir a função para processar as imagens recebidas
         ws.onmessage = (event) => {

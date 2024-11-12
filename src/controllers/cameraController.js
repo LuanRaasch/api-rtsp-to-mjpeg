@@ -47,7 +47,7 @@ cadastrarCamera = (req, res) => {
         cameras[name] = { rtspUrl, wsPort };
         streams[name] = stream;
 
-        return res.status(201).json({ message: 'Câmera cadastrada com sucesso', wsPort });
+        return res.status(201).json({ camera: camera });
     } catch (error) {
         logger.error(`Erro ao cadastrar câmera: ${error.message}`);
         return res.status(500).json({ error: 'Erro interno ao cadastrar câmera' });
@@ -62,22 +62,6 @@ camerasCadastradas = (req, res) => {
         return res.status(500).json({ error: 'Erro interno ao retornar câmeras cadastradas' });
     };
 };
-
-// acessarVideo = (req, res) => {
-//     try {
-//         const cameraName = req.params.name;
-//         const camera = cameras[cameraName];
-
-//         if (!camera) {
-//             return res.status(404).json({ error: 'Câmera não encontrada' });
-//         };
-
-//         res.sendFile(path.join(__dirname, '../../public/index.html'));
-//     } catch (error) {
-//         logger.error(`Erro ao acessar vídeo: ${error.message}`);
-//         return res.status(500).json({ error: 'Erro interno ao acessar vídeo' });
-//     };
-// };
 
 const acessarVideo = (req, res) => {
     try {

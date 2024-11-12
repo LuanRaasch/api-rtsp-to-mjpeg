@@ -1,5 +1,8 @@
 const logger = require('../utils/logger');
 const Camera = require('../models/camera');
+const Stream = require('node-rtsp-stream');
+const path = require('path');
+
 
 let cameras = {};
 
@@ -39,7 +42,8 @@ cadastrarCamera = (req, res) => {
 
         return res.status(201).json({ message: 'Câmera cadastrada com sucesso', wsPort });
     } catch (error) {
-        logger.error(`Erro ao cadastrar câmera.`);
+        logger.error(`Erro ao cadastrar câmera: ${error.message}`);
+        return res.status(500).json({ error: 'Erro interno ao cadastrar câmera' });
     };
 };
 
@@ -47,7 +51,8 @@ camerasCadastradas = (req, res) => {
     try {
         res.json(cameras);
     } catch (error) {
-        logger.error(`Erro ao retornar câmeras cadastradas.`);
+        logger.error(`Erro ao retornar câmeras cadastradas: ${error.message}`);
+        return res.status(500).json({ error: 'Erro interno ao retornar câmeras cadastradas' });
     };
 };
 
@@ -58,12 +63,13 @@ acessarVideo = (req, res) => {
 
         if (!camera) {
             return res.status(404).json({ error: 'Câmera não encontrada' });
-        }
+        };
 
-        res.sendFile(__dirname + '/public/index.html');
+        res.sendFile(path.join(__dirname, '../../public/index.html'));
     } catch (error) {
-        logger.error(`Erro ao retornar câmeras cadastradas.`);
-    }
+        logger.error(`Erro ao acessar vídeo: ${error.message}`);
+        return res.status(500).json({ error: 'Erro interno ao acessar vídeo' });
+    };
 };
 
 module.exports = { cadastrarCamera, camerasCadastradas, acessarVideo };

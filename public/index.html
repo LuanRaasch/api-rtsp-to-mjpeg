@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream de Vídeo</title>
+    <style>
+        #video-container {
+            text-align: center;
+            padding: 10px;
+        }
+
+        #video {
+            width: 1280px;
+            height: 720px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Stream de Vídeo da Câmera</h1>
+    <div id="video-container">
+        <img id="video" src="" alt="Video Stream" />
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('video');
+        const ws = new WebSocket('ws://localhost:9999'); // WebSocket para o stream
+
+        // Definir a função para processar as imagens recebidas
+        ws.onmessage = (event) => {
+            const imageBlob = event.data;
+            const imageUrl = URL.createObjectURL(imageBlob); // Cria a URL do Blob
+            videoElement.src = imageUrl; // Atualiza a fonte da imagem
+        };
+
+        // Tratar quando o WebSocket se conectar
+        ws.onopen = () => {
+            console.log("Conexão WebSocket aberta.");
+        };
+
+        // Tratar erros
+        ws.onerror = (error) => {
+            console.error("Erro WebSocket:", error);
+        };
+
+        // Tratar quando o WebSocket se desconectar
+        ws.onclose = () => {
+            console.log("Conexão WebSocket fechada.");
+        };
+    </script>
+</body>
+
+</html>

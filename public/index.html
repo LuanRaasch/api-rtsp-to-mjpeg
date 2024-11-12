@@ -30,7 +30,7 @@
 
     <script>
         const videoElement = document.getElementById('video');
-        const ws = new WebSocket('ws://10.0.1.73:9999');
+        const ws = new WebSocket(wsUrl);
         // Definir a função para processar as imagens recebidas
         ws.onmessage = (event) => {
             const imageBlob = event.data;

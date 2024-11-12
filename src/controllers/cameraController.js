@@ -2,6 +2,7 @@ const logger = require('../utils/logger');
 const Camera = require('../models/camera');
 const Stream = require('node-rtsp-stream');
 const path = require('path');
+const fs = require('fs');
 
 
 let cameras = {}; //Armazena as câmeras em memória   
@@ -62,7 +63,23 @@ camerasCadastradas = (req, res) => {
     };
 };
 
-acessarVideo = (req, res) => {
+// acessarVideo = (req, res) => {
+//     try {
+//         const cameraName = req.params.name;
+//         const camera = cameras[cameraName];
+
+//         if (!camera) {
+//             return res.status(404).json({ error: 'Câmera não encontrada' });
+//         };
+
+//         res.sendFile(path.join(__dirname, '../../public/index.html'));
+//     } catch (error) {
+//         logger.error(`Erro ao acessar vídeo: ${error.message}`);
+//         return res.status(500).json({ error: 'Erro interno ao acessar vídeo' });
+//     };
+// };
+
+const acessarVideo = (req, res) => {
     try {
         const cameraName = req.params.name;
         const camera = cameras[cameraName];
@@ -71,11 +88,30 @@ acessarVideo = (req, res) => {
             return res.status(404).json({ error: 'Câmera não encontrada' });
         };
 
-        res.sendFile(path.join(__dirname, '../../public/index.html'));
+        const wsUrl = 'ws://10.0.1.73:' + camera.wsPort; // URL do WebSocket específica da câmera
+
+        // Carrega o HTML e insere o WebSocket dinamicamente
+        const filePath = path.join(__dirname, '../../public/index.html');
+        fs.readFile(filePath, 'utf8', (err, html) => {
+            if (err) {
+                logger.error(`Erro ao carregar HTML: ${err.message}`);
+                return res.status(500).json({ error: 'Erro interno ao carregar a página' });
+            }
+
+            // Insere o wsUrl diretamente no JavaScript do HTML
+            const modifiedHtml = html.replace(
+                '<script>',
+                `<script>
+                    const wsUrl = "${wsUrl}";
+                `
+            );
+
+            res.send(modifiedHtml);
+        });
     } catch (error) {
         logger.error(`Erro ao acessar vídeo: ${error.message}`);
         return res.status(500).json({ error: 'Erro interno ao acessar vídeo' });
-    };
+    }
 };
 
 removerCamera = (req, res) => {

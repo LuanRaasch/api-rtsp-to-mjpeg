@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y ffmpeg
 RUN apt-get update && apt-get install -y nano
 
 # Defina o diretório de trabalho
-WORKDIR /app
+WORKDIR /usr/src/rtsp-to-mjpeg
 
 # Copie os arquivos de dependência
 COPY package*.json ./

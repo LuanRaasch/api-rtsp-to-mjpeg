@@ -9,6 +9,16 @@ const fs = require('fs');
 let cameras = {}; //Armazena as câmeras em memória   
 let streams = {}; // Armazena os streams para gerenciamento
 
+let availablePorts = Array.from({ length: 100 }, (_, i) => 10001 + i); // Portas de 10001 até 10099
+
+function allocatePort() {
+    if (availablePorts.length > 0) {
+        return availablePorts.pop(); // Retira a última porta disponível
+    } else {
+        throw new Error('Nenhuma porta disponível');
+    };
+};
+
 cadastrarCamera = (req, res) => {
     try {
         const { name, rtspUrl } = req.body;
@@ -17,14 +27,12 @@ cadastrarCamera = (req, res) => {
             return res.status(400).json({ error: 'Nome e URL RTSP são obrigatórios' });
         };
 
-        // Verificar se a câmera já existe
         if (Camera.exists(name, cameras)) {
             return res.status(400).json({ error: 'Câmera já cadastrada' });
         };
 
-        // Verifica se os dados estão corretos
-        const wsPort = 9999 + Object.keys(cameras).length;
-        const camera = Camera.createCamera(name, rtspUrl, wsPort); // Cria a câmera
+        const wsPort = allocatePort(); // Aloca uma porta do pool
+        const camera = Camera.createCamera(name, rtspUrl, wsPort);
 
         // Gerar WebSocket para a câmera
         //Stream.ffmpegPath = process.env.PATH_FFMPEG || 'C:/ffmpeg/bin/ffmpeg.exe';

@@ -9,7 +9,7 @@ app.use(express.static('public')); // Servir arquivos estáticos a partir da pas
 
 app.use('/camera', cameraRoutes);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 10000;
 app.listen(port, () => {
     logger.info(`API rtsp-to-mjpeg rodando na porta: ${port}`);
 });

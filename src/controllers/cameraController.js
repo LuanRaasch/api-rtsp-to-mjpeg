@@ -27,7 +27,7 @@ cadastrarCamera = (req, res) => {
         const camera = Camera.createCamera(name, rtspUrl, wsPort); // Cria a câmera
 
         // Gerar WebSocket para a câmera
-        Stream.ffmpegPath = process.env.PATH_FFMPEG || 'C:/ffmpeg/bin/ffmpeg.exe';
+        //Stream.ffmpegPath = process.env.PATH_FFMPEG || 'C:/ffmpeg/bin/ffmpeg.exe';
 
         const stream = new Stream({
             name,

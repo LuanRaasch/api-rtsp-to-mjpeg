@@ -18,7 +18,7 @@ RUN npm install
 COPY . .
 
 # Exponha a porta da API
-EXPOSE 3000
+EXPOSE 10000
 
 # Comando para iniciar a API
 CMD ["npm", "start"]

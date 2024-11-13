@@ -1,4 +1,4 @@
-# API BIOSINCRONIZA
+# API RTSP-TO-MJPEG
 
 Esta é a API para transmissões de stream via RTSP, ela é responsável por pegar o fluxo RTSP e converter para MJPEG.
 

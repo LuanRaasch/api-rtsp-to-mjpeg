@@ -73,7 +73,8 @@ acessarVideo = (req, res) => {
             return res.status(404).json({ error: 'Câmera não encontrada' });
         };
 
-        const wsUrl = process.env.HOST_SOCKET + ':' + camera.wsPort || 'http://10.0.1.73:' + camera.wsPort; // URL do WebSocket específica da câmera
+        //const wsUrl = process.env.HOST_SOCKET + ':' + camera.wsPort || 'http://10.0.1.73:' + camera.wsPort; // URL do WebSocket específica da câmera
+        const wsUrl = (process.env.HOST_SOCKET ? process.env.HOST_SOCKET : 'ws://10.0.1.73') + ':' + camera.wsPort;
 
         // Carrega o HTML e insere o WebSocket dinamicamente
         const filePath = path.join(__dirname, '../../public/index.html');

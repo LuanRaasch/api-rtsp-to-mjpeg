@@ -1,3 +1,4 @@
+require('dotenv').config();
 const logger = require('../utils/logger');
 const Camera = require('../models/camera');
 const Stream = require('node-rtsp-stream');
@@ -63,7 +64,7 @@ camerasCadastradas = (req, res) => {
     };
 };
 
-const acessarVideo = (req, res) => {
+acessarVideo = (req, res) => {
     try {
         const cameraName = req.params.name;
         const camera = cameras[cameraName];
@@ -72,7 +73,7 @@ const acessarVideo = (req, res) => {
             return res.status(404).json({ error: 'Câmera não encontrada' });
         };
 
-        const wsUrl = 'ws://10.0.1.73:' + camera.wsPort; // URL do WebSocket específica da câmera
+        const wsUrl = process.env.HOST_SOCKET + ':' + camera.wsPort || 'http://10.0.1.73:' + camera.wsPort; // URL do WebSocket específica da câmera
 
         // Carrega o HTML e insere o WebSocket dinamicamente
         const filePath = path.join(__dirname, '../../public/index.html');
@@ -95,7 +96,7 @@ const acessarVideo = (req, res) => {
     } catch (error) {
         logger.error(`Erro ao acessar vídeo: ${error.message}`);
         return res.status(500).json({ error: 'Erro interno ao acessar vídeo' });
-    }
+    };
 };
 
 removerCamera = (req, res) => {
@@ -120,7 +121,7 @@ removerCamera = (req, res) => {
     } catch (error) {
         logger.error(`Erro ao remover câmera: ${error.message}`);
         return res.status(500).json({ error: 'Erro interno ao remover câmera' });
-    }
+    };
 };
 
 module.exports = { cadastrarCamera, camerasCadastradas, acessarVideo, removerCamera };

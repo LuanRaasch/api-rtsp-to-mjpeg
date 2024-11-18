@@ -52,6 +52,10 @@ cadastrarCamera = (req, res) => {
             }
         });
 
+        stream.on('error', (error) => {
+            console.error("Erro no FFmpeg:", error);
+        });
+
         // Armazenar as informações e o stream da câmera
         cameras[name] = { rtspUrl, wsPort };
         streams[name] = stream;
